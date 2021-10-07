@@ -12,9 +12,11 @@ const db = firebase.database()
 
 // Importar modulos (CLASES) correspondientes a los modelos de la base de datos
 const User = require('./users')
+const  Questions=require('./question')
 
 // Recordar que los modelos esperan como parámetro una referencia hacia la base de datos.
 // Exportamos las instancias de los modelos listas para ser invocadas en los controladores correspondientes
 module.exports = {
-  user: new User(db)
+  user: new User(db),
+  questions: new Questions(db)
 }

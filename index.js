@@ -1,18 +1,20 @@
 'use strict'
 
 const Hapi = require('hapi')
-const handlerbars = require('handlebars')
+const handlerbars = require('./lib/helpers')
 const inert = require('inert')
+const methods=require('./lib/methods')
 const path = require('path')
 const vision = require('vision')
 const routes=require('./routes')
+
 
 const server = Hapi.server({
   port: process.env.PORT || 3000,
   host: 'localhost',
   routes: {
     files: {
-      relativeTo: path.join(__dirname, 'public')
+      relativeTo: path.join(__dirname, '/public')
     }
   }
 })
@@ -21,6 +23,7 @@ async function init () {
   try {
     await server.register(inert)
     await server.register(vision)
+    server.method('setAnswerRight', methods.setAnswerRight)
 
 
 // Configurar el servidor para el envio de cookies (nombreCookie, opciones)
@@ -54,5 +57,10 @@ async function init () {
 
   console.log(`Servidor lanzado en: ${server.info.uri}`)
 }
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception', err);
+  process.exit(1);
+});
 
 init()

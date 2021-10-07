@@ -3,6 +3,8 @@
 const site = require('./public/controllers/sites')
 const user = require('./public/controllers/user')
 const Joi = require('@hapi/joi')
+const {body,validationResult}=require('express-validator')
+const questions=require('./public/controllers/question')
 
 module.exports = [
   {
@@ -17,7 +19,6 @@ module.exports = [
   },
   {
     method: 'POST',
-
     // options: {
     //   validate: {
     //     payload: Joi.object({
@@ -39,9 +40,20 @@ module.exports = [
   },
   {
     method: 'GET',
+    path: '/question/{id}',
+    handler: site.viewQuestion
+  },
+  {
+    method: 'GET',
     path: '/logout',
     handler: user.logout
   },
+  {
+    method: 'GET',
+    path: '/ask',
+    handler: site.ask
+  },
+
   {
     method: 'POST',
 
@@ -56,6 +68,40 @@ module.exports = [
     path: '/validate-user',
     handler: user.validateUser,
   },
+  ///>>///
+  {
+    method: 'POST',
+
+    // options: {
+    //   validate: {
+    //     payload: Joi.object({
+    //       email: Joi.string().email().required(),
+    //       password: Joi.string().required().min(6)
+    //     })
+    //   }
+    // },
+    path: '/create-question',
+    handler: questions.createQuestion,
+  },
+  {
+    path: '/answer-question',
+    method: 'POST',
+    // options: {
+    //   validate: {
+    //     payload: {
+    //       answer: Joi.string().required(),
+    //       id: Joi.string().required()
+    //     },
+    //     failAction: user.failValidation
+    //   }
+    // },
+    handler: questions.answerQuestion
+  },
+  {
+    method: 'GET',
+    path: '/answer/{questionId}/{answerId}',
+    handler: questions.setAnswerRight
+  },
   {
     method: 'GET',
     path: '/{param*}',
@@ -66,4 +112,5 @@ module.exports = [
       }
     }
   }
+
 ]
